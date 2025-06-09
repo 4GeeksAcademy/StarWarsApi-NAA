@@ -67,14 +67,9 @@ def get_users():
 
 
     except Exception as e:
-        # print(f"Error al obtener usuarios: {e}")
         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
 
 @app.route('/characters', methods=['GET'])
-# def get_characters():
-    # query = Character.query.all()
-    # results = list(map(lambda character: character.serialize(), query))
-    # return jsonify(results), 200
 def get_characters():
     try:
         query_results = Character.query.all()
@@ -90,24 +85,9 @@ def get_characters():
         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
 
 @app.route('/characters/<int:character_id>', methods=['GET'])
-# def get_character(character_id):  
-#     try:
-#         query_character = Character.query.filter_by(id=character_id).first()
-#         if not query_character:
-#             return jsonify({"msg": "Character not found"}), 404
-
-
-#         response_body = {
-#             "msg": "ok",
-#             "results": query_character.serialize()
-#         }
-#         return jsonify(response_body), 200
-    
-#     except Exception as e:
-#         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
 def get_character(character_id):
     try:
-        character = Character.query.filter_by(id=character_id).first()
+        character = Character.query.get(character_id)
         if not character:
             return jsonify({"msg": "Character not found"}), 404
         return jsonify(character.serialize()), 200
@@ -115,48 +95,7 @@ def get_character(character_id):
         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
     
 
-# @app.route('/characters', methods=['GET'])
-# def get_all_characters():
-#     try:
-#         characters = Character.query.all()
-#         results = list(map(lambda item: item.serialize(), characters))
-#         return jsonify({"msg": "ok", "results": results}), 200
-
-#     except Exception as e:
-#         return jsonify({"msg": "Error retrieving characters", "error": str(e)}), 500
-
-
-
-
-
 @app.route('/planets', methods=['GET'])
-# def get_planet(planet_id):  
-#     try:   
-#         query_planet = Planets.query.filter_by(id=planet_id).first()
-#         if not query_planet:
-#             return jsonify({"msg": "Planet not found"}), 404
-    
-
-#         response_body = {
-#             "msg": "ok",
-#             "results": query_planet.serialize()
-#         }
-#         return jsonify(response_body), 200
-
-#     except Exception as e:
-#         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
-
-
-# @app.route('/planets', methods=['GET'])
-# def get_all_planets():
-#     try:
-#         planets = Planets.query.all()
-#         results = list(map(lambda item: item.serialize(), planets))
-#         return jsonify({"msg": "ok", "results": results}), 200
-
-#     except Exception as e:
-#         return jsonify({"msg": "Error retrieving planets", "error": str(e)}), 500
-
 def get_planets():
     try:
         query_results = Planets.query.all()
@@ -174,97 +113,12 @@ def get_planets():
 @app.route('/planets/<int:planet_id>', methods=['GET'])
 def get_planet(planet_id):
     try:
-        planet = Planets.query.filter_by(id=planet_id).first()
+        planet = Planets.query.get(planet_id) 
         if not planet:
             return jsonify({"msg": "Planet not found"}), 404
         return jsonify(planet.serialize()), 200
     except Exception as e:
         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
-
-##Create User
-
-# @app.route('/character/<int:character_id>', methods=['POST'])
-# def create_user():
-#     data=request.get_json()
-    
-#     if not data:
-#         return jsonify({"msg": "no se proporcionaron datos"}), 400
-
-#     email = data.get('email')
-#     password = data.get('password')
-#     is_active = data.get('is_active', False)
-
-#     existing_user=User.query.filter_by(email=email).first()
-#     if existing_user:
-#         return jsonify({"msg": "ya exsite un usuario con ese mail"}), 409
-
-#     new_user= User(
-#         email =email,
-#         password=password,
-#         is_active=is_active
-#     )
-#     db.session.add(new_user)
-
-#     try:
-#         db.session.commit()
-#         return jsonify(new_user.serialize()), 201
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"msg": f"Internal Server Error", "error": str(e)}), 500
-
-# #Favorites
-
-# # @app.route('/user/<int:user_id>/favorite/character/<int:character_id>', methods=['POST'])
-# # def add_favorite_character(user_id, character_id):
- 
- 
- 
-#     # data=request_get_json()
-    
-#     # if not data:
-#     #     return jsonify({"msg": "no se proporcionaron datos"}), 400
-
-#     # email= data.get('email')
-#     # password= data.get('password')
-#     # is_active=data.get('is_active, false')
-
-#     # existing_user=User.query.filter_by(email=email).first()
-#     # if existing_user:
-#     #     return jsonify({"msg": "ya exsite un usuario con ese mail"}), 409
-
-#     # new_user= User(
-#     #     email =email,
-#     #     password=password,
-#     #     is_active=is_active
-#     # )
-#     # db.session.add(new_user)
-
-#     # try:
-#     #     db.session.commit()
-#     #     return jsonify(new_user.serialize()), 201
-#     # except Exception as e:
-#     #     db.session.rollback()
-#     #     return jsonify({"msg": f"Internal Server Error", "error": str(e)}), 500
-
-
-
-
-# @app.route('/favorite/character/<int:user_id>/character_id>', methods=['DELETE'])
-# def delete_favorite_character(user_id, character_id):
-#     favorite_character= Fav_character.query.filter_by(user_id=user_id, character_id=character_id).first()
-#     db.session.delete(favorite_character)
-#     db.session.commit()
-#     return jsonify({"msg": "Character eliminado de favorito"}), 200
-
-# #agregar validaciones planeta no existe, nave no existe, personaje no existe, agregar mas posibilidades 21:25-21:42, 21:44 planificación de realizar proyecto
-# #agregar manejo de errores y probarlo
-
-
-
-
-#    # this only runs if `$ python src/app.py` is executed
-# if __name__ == '__main__':
-#     PORT = int(os.environ.get('PORT', 3000))
 
 #create user 
 
@@ -304,20 +158,10 @@ def get_user_favorites():
         user_id = request.json.get("user_id")
         if not user_id:
             return jsonify({"msg": "user_id is required"}), 400
-
-        fav_characters = Fav_character.query.filter_by(user_id=user_id).all()
-        fav_planets = Fav_planets.query.filter_by(user_id=user_id).all()
-
-        results = {
-            "characters": [fav.character.serialize() for fav in fav_characters],
-            "planets": [fav.planet.serialize() for fav in fav_planets]
-        }
-
-        response_body = {
-            "msg": "ok",
-            "results": results
-        }
-        return jsonify(response_body), 200
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"msg": "user not found"}), 404
+        return jsonify(user.serialize()), 200
     except Exception as e:
         return jsonify({"msg": "Internal Server Error", "error": str(e)}), 500
 
@@ -327,6 +171,17 @@ def add_favorite_planet(planet_id):
         user_id = request.json.get("user_id")
         if not user_id:
             return jsonify({"msg": "user_id is required"}), 400
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"msg": "user not found"}), 404 
+        planet = Planets.query.get(planet_id)
+        if not planet:
+            return jsonify({"msg": "planet not found"}), 404
+        
+        
+        for planet in user.favorite_planets:
+            if planet.id ==planet_id: 
+                return jsonify({"msg": "planet already exist in favorites"}), 400
 
         favorite = Fav_planets(user_id=user_id, planet_id=planet_id)
         db.session.add(favorite)
@@ -342,6 +197,16 @@ def add_favorite_character(character_id):
         user_id = request.json.get("user_id")
         if not user_id:
             return jsonify({"msg": "user_id is required"}), 400
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"msg": "user not found"}), 404
+        character = Character.query.get(character_id)
+        if not character:
+            return jsonify({"msg": "character not found"}), 404
+        
+        for character in user.favorite_characters:
+            if character.id ==character_id: 
+                return jsonify({"msg": "character already exist in favorites"}), 400
 
         favorite = Fav_character(user_id=user_id, character_id=character_id)
         db.session.add(favorite)
